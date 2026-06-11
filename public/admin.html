@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel — USA vs Iran War Games</title>
+  <link rel="icon" type="image/png" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="/favicon-64.png">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Black+Ops+One&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Share Tech Mono', 'Courier New', monospace;
+      background: #0d0f12;
+      color: #c8ccd0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #60a5fa;
+      font-size: 1.6rem;
+      margin-bottom: 6px;
+      letter-spacing: 6px;
+      font-family: 'Black Ops One', monospace;
+      text-transform: uppercase;
+    }
+    .subtitle {
+      text-align: center;
+      color: #6b7280;
+      font-size: 0.8rem;
+      margin-bottom: 28px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .card {
+      background: #13161a;
+      border: 1px solid #2a2d32;
+      border-top: 1px solid #1e40af;
+      border-radius: 0;
+      padding: 24px;
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .card::before {
+      content: '⊕';
+      position: absolute;
+      top: 6px;
+      left: 8px;
+      font-size: 10px;
+      color: #4a4d52;
+      pointer-events: none;
+    }
+    .card::after {
+      content: '⊕';
+      position: absolute;
+      bottom: 6px;
+      right: 8px;
+      font-size: 10px;
+      color: #4a4d52;
+      pointer-events: none;
+    }
+
+    .card h2 {
+      font-size: 1rem;
+      color: #60a5fa;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #2a2d32;
+      font-family: 'Black Ops One', monospace;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    label {
+      display: block;
+      font-size: 0.75rem;
+      color: #6b7280;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-family: 'Share Tech Mono', monospace;
+    }
+
+    input[type="password"],
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 10px 12px;
+      background: #0d0f12;
+      border: 1px solid #2a2d32;
+      border-radius: 0;
+      color: #c8ccd0;
+      font-size: 0.9rem;
+      font-family: 'Share Tech Mono', monospace;
+      outline: none;
+      transition: border-color 0.15s;
+      margin-bottom: 12px;
+    }
+    input:focus {
+      border-color: #1e40af;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #1e40af;
+      color: #0d0f12;
+      border: 1px solid #1e40af;
+      border-radius: 0;
+      font-size: 0.9rem;
+      font-weight: 700;
+      font-family: 'Share Tech Mono', monospace;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    button:hover { background: #60a5fa; }
+    button:active { transform: none; }
+    button:disabled {
+      background: #2a2d32;
+      color: #4a4d52;
+      border-color: #2a2d32;
+      cursor: not-allowed;
+    }
+
+    .msg {
+      margin-top: 10px;
+      padding: 8px 12px;
+      border-radius: 0;
+      font-size: 0.8rem;
+      display: none;
+      font-family: 'Share Tech Mono', monospace;
+    }
+    .msg.success {
+      display: block;
+      background: rgba(46,204,113,0.08);
+      border: 1px solid #2ecc71;
+      color: #2ecc71;
+    }
+    .msg.error {
+      display: block;
+      background: rgba(192,57,43,0.08);
+      border: 1px solid #c0392b;
+      color: #c0392b;
+    }
+
+    .user-result {
+      background: #0d0f12;
+      border: 1px solid #2a2d32;
+      border-left: 2px solid #6b7280;
+      border-radius: 0;
+      padding: 12px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .user-result:hover {
+      border-color: #1e40af;
+      border-left-color: #1e40af;
+    }
+    .user-result .pk {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.8rem;
+      color: #9ca3af;
+      word-break: break-all;
+    }
+    .user-result .stats {
+      display: flex;
+      gap: 14px;
+      margin-top: 6px;
+      font-size: 0.8rem;
+      color: #6b7280;
+      font-family: 'Share Tech Mono', monospace;
+    }
+    .user-result .stats span {
+      color: #9ca3af;
+    }
+    .user-result .balance-tag {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 2px 8px;
+      background: rgba(46,204,113,0.08);
+      border: 1px solid #2ecc71;
+      border-radius: 0;
+      color: #2ecc71;
+      font-size: 0.8rem;
+      font-weight: 700;
+      font-family: 'Share Tech Mono', monospace;
+    }
+
+    .hidden { display: none !important; }
+
+    .search-results {
+      margin-top: 12px;
+      max-height: 350px;
+      overflow-y: auto;
+    }
+    .search-results::-webkit-scrollbar { width: 3px; }
+    .search-results::-webkit-scrollbar-track { background: #0d0f12; }
+    .search-results::-webkit-scrollbar-thumb { background: #3a3d42; border-radius: 0; }
+
+    .selected-user {
+      background: #0d0f12;
+      border: 1px solid #9945FF;
+      border-radius: 0;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.8rem;
+      word-break: break-all;
+      color: #b366ff;
+    }
+    .selected-user .label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 4px;
+    }
+
+    .logout-btn {
+      background: transparent;
+      border: 1px solid #2a2d32;
+      color: #6b7280;
+      font-size: 0.8rem;
+      padding: 8px;
+      margin-top: 10px;
+    }
+    .logout-btn:hover {
+      border-color: #c0392b;
+      color: #c0392b;
+      background: transparent;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>⚙ WAR GAMES ADMIN</h1>
+    <p class="subtitle">USA vs Iran War Games — Balance Management</p>
+
+    <!-- Login Screen -->
+    <div id="loginScreen" class="card">
+      <h2>🔒 Admin Login</h2>
+      <label for="adminPassword">Password</label>
+      <input type="password" id="adminPassword" placeholder="Enter admin password" autocomplete="off">
+      <button id="loginBtn" onclick="adminLogin()">Login</button>
+      <div id="loginMsg" class="msg"></div>
+    </div>
+
+    <!-- Admin Dashboard (hidden until login) -->
+    <div id="dashboard" class="hidden">
+
+      <!-- Search User -->
+      <div class="card">
+        <h2>🔍 Search User</h2>
+        <label for="searchQuery">Public Key (full or partial)</label>
+        <input type="text" id="searchQuery" placeholder="Paste wallet address or partial key...">
+        <button onclick="searchUser()">Search</button>
+        <div id="searchMsg" class="msg"></div>
+        <div id="searchResults" class="search-results"></div>
+      </div>
+
+      <!-- Add Balance -->
+      <div class="card">
+        <h2>💰 Add SOL Balance</h2>
+        <div id="selectedUserBox" class="selected-user hidden">
+          <div class="label">Selected User</div>
+          <div id="selectedUserKey">—</div>
+        </div>
+        <label for="targetKey">User Public Key</label>
+        <input type="text" id="targetKey" placeholder="Select from search or paste key...">
+        <label for="addAmount">Amount (SOL)</label>
+        <input type="number" id="addAmount" placeholder="e.g. 1.5" step="0.001" min="0.001">
+        <button onclick="addBalance()">Add Balance</button>
+        <div id="addMsg" class="msg"></div>
+      </div>
+
+      <!-- Clear Chat -->
+      <div class="card">
+        <h2>🧹 Clear Chat Messages</h2>
+        <p style="font-size:0.85rem;color:#6b7280;margin-bottom:14px;">Delete all chat messages from the lobby. This cannot be undone.</p>
+        <button onclick="clearChat()" style="background:#c0392b;border-color:#c0392b;color:#fff;">Clear All Chat</button>
+        <div id="clearChatMsg" class="msg"></div>
+      </div>
+
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <script>
+    // Game server URL — same as in index.html
+    var GAME_SERVER = window.GAME_SERVER_URL || '';
+    function apiUrl(path) { return GAME_SERVER ? GAME_SERVER + path : path; }
+
+    let adminPassword = '';
+
+    // Login
+    async function adminLogin() {
+      const pw = document.getElementById('adminPassword').value.trim();
+      if (!pw) return showMsg('loginMsg', 'Enter a password', 'error');
+
+      const res = await fetch(apiUrl('/api/admin/login'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pw })
+      });
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        adminPassword = pw;
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('dashboard').classList.remove('hidden');
+      } else {
+        showMsg('loginMsg', data.error || 'Invalid password', 'error');
+      }
+    }
+
+    // Enter key for login
+    document.getElementById('adminPassword').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') adminLogin();
+    });
+
+    // Search user
+    async function searchUser() {
+      const query = document.getElementById('searchQuery').value.trim();
+      if (!query) return showMsg('searchMsg', 'Enter a public key to search', 'error');
+
+      const res = await fetch(apiUrl('/api/admin/search-user'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: adminPassword, query })
+      });
+      const data = await res.json();
+
+      if (!res.ok) return showMsg('searchMsg', data.error || 'Search failed', 'error');
+
+      const container = document.getElementById('searchResults');
+      container.innerHTML = '';
+
+      if (!data.users || data.users.length === 0) {
+        return showMsg('searchMsg', 'No users found', 'error');
+      }
+
+      hideMsg('searchMsg');
+
+      data.users.forEach(u => {
+        const div = document.createElement('div');
+        div.className = 'user-result';
+        div.onclick = () => selectUser(u.public_key);
+        div.innerHTML = `
+          <div class="pk">${u.public_key}</div>
+          <div class="balance-tag">${parseFloat(u.balance || 0).toFixed(4)} SOL</div>
+          <div class="stats">
+            <div>W: <span>${u.wins}</span></div>
+            <div>L: <span>${u.losses}</span></div>
+            <div>K: <span>${u.kills}</span></div>
+            <div>D: <span>${u.deaths}</span></div>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // Enter key for search
+    document.getElementById('searchQuery').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') searchUser();
+    });
+
+    // Select user from search results
+    function selectUser(publicKey) {
+      document.getElementById('targetKey').value = publicKey;
+      document.getElementById('selectedUserKey').textContent = publicKey;
+      document.getElementById('selectedUserBox').classList.remove('hidden');
+      document.getElementById('addAmount').focus();
+    }
+
+    // Add balance
+    async function addBalance() {
+      const publicKey = document.getElementById('targetKey').value.trim();
+      const amount = document.getElementById('addAmount').value.trim();
+
+      if (!publicKey) return showMsg('addMsg', 'Enter a public key', 'error');
+      if (!amount || parseFloat(amount) <= 0) return showMsg('addMsg', 'Enter a valid amount', 'error');
+
+      const res = await fetch(apiUrl('/api/admin/add-balance'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: adminPassword, publicKey, amount })
+      });
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        showMsg('addMsg', `Added ${data.added} SOL — New balance: ${data.newBalance.toFixed(4)} SOL`, 'success');
+        document.getElementById('addAmount').value = '';
+      } else {
+        showMsg('addMsg', data.error || 'Failed to add balance', 'error');
+      }
+    }
+
+    // Clear chat
+    async function clearChat() {
+      if (!confirm('Are you sure you want to delete ALL chat messages?')) return;
+      const res = await fetch(apiUrl('/api/admin/clear-chat'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: adminPassword })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        showMsg('clearChatMsg', 'All chat messages cleared!', 'success');
+      } else {
+        showMsg('clearChatMsg', data.error || 'Failed to clear chat', 'error');
+      }
+    }
+
+    // Logout
+    function logout() {
+      adminPassword = '';
+      document.getElementById('loginScreen').classList.remove('hidden');
+      document.getElementById('dashboard').classList.add('hidden');
+      document.getElementById('adminPassword').value = '';
+      document.getElementById('searchQuery').value = '';
+      document.getElementById('searchResults').innerHTML = '';
+      document.getElementById('targetKey').value = '';
+      document.getElementById('addAmount').value = '';
+      document.getElementById('selectedUserBox').classList.add('hidden');
+    }
+
+    // Helpers
+    function showMsg(id, text, type) {
+      const el = document.getElementById(id);
+      el.textContent = text;
+      el.className = 'msg ' + type;
+    }
+    function hideMsg(id) {
+      const el = document.getElementById(id);
+      el.className = 'msg';
+      el.style.display = 'none';
+    }
+  </script>
+</body>
+</html>

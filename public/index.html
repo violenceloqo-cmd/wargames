@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UNITED STATES vs IRAN — War Games</title>
+  <link rel="icon" type="image/png" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="/favicon-64.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ════════ ANIMATED 3D WAR BACKGROUND ════════ -->
+  <div id="war-scene" aria-hidden="true">
+    <div class="ws-sky"></div>
+    <div class="ws-stars"></div>
+    <div class="ws-searchlight ws-searchlight-a"></div>
+    <div class="ws-searchlight ws-searchlight-b"></div>
+    <div class="ws-jet"></div>
+    <div class="ws-smoke ws-smoke-1"></div>
+    <div class="ws-smoke ws-smoke-2"></div>
+    <div class="ws-smoke ws-smoke-3"></div>
+
+    <div class="ws-stage">
+      <!-- USA side (left) -->
+      <div class="ws-flag ws-flag-usa">🇺🇸</div>
+      <div class="soldier soldier-usa s-depth-far"></div>
+      <div class="soldier soldier-usa s-depth-mid"></div>
+      <div class="soldier soldier-usa s-depth-near"></div>
+
+      <!-- IRAN side (right) -->
+      <div class="ws-flag ws-flag-iran">🇮🇷</div>
+      <div class="soldier soldier-iran s-depth-far"></div>
+      <div class="soldier soldier-iran s-depth-mid"></div>
+      <div class="soldier soldier-iran s-depth-near"></div>
+    </div>
+
+    <div class="ws-tracer ws-tracer-1"></div>
+    <div class="ws-tracer ws-tracer-2"></div>
+    <div class="ws-ground"></div>
+    <div class="ws-vignette"></div>
+    <div class="ws-scanlines"></div>
+  </div>
+
+  <!-- Auth Screen -->
+  <div id="auth-screen">
+    <div class="lobby-title">UNITED STATES vs IRAN</div>
+    <div class="lobby-subtitle">WAR GAMES</div>
+    <div class="contract-address-container">
+      <div class="contract-address" id="contract-address">EAs9b3JNMryjUrDeXTVL4XZ7yaTDNBWVZScXnZMEpump</div>
+      <button class="copy-contract-btn" id="copy-contract-btn" title="Copy to clipboard">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+      </button>
+    </div>
+    <div class="auth-box">
+      <div class="auth-buttons">
+        <button id="signup-btn" class="action-btn auth-btn">Sign Up</button>
+        <button id="login-btn" class="action-btn auth-btn login-variant">Log In</button>
+      </div>
+      <div id="login-form" class="login-form" style="display:none;">
+        <input type="text" id="login-private-key" class="auth-input" placeholder="Enter your private key...">
+        <button id="login-submit-btn" class="action-btn">SUBMIT</button>
+        <button id="login-cancel-btn" class="auth-cancel-btn">CANCEL</button>
+      </div>
+      <div id="auth-error" class="auth-error"></div>
+    </div>
+    <button id="how-it-works-btn-auth" class="how-it-works-btn">HOW IT WORKS</button>
+    <a href="https://x.com/i/communities/2029979761783549986/" target="_blank" class="x-btn" title="Follow us on X">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    </a>
+  </div>
+
+  <!-- Lobby -->
+  <div id="lobby" style="display:none;">
+    <div class="lobby-title">WAR GAMES</div>
+    <div class="lobby-teams">
+      <span class="team-label-usa">🇺🇸 UNITED STATES</span>
+      <span class="vs-divider">VS</span>
+      <span class="team-label-iran">🇮🇷 IRAN</span>
+    </div>
+
+    <div class="lobby-top-bar">
+      <div class="lobby-user-info">
+        <span id="lobby-username" class="lobby-username"></span>
+        <div class="balance-display">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" class="balance-icon"><g fill="none"><path fill="url(#SVGzrxqqeia)" d="M18.413 7.902a.62.62 0 0 1-.411.163H3.58c-.512 0-.77-.585-.416-.928l2.369-2.284a.6.6 0 0 1 .41-.169H20.42c.517 0 .77.59.41.935z"/><path fill="url(#SVGjVQeOkmE)" d="M18.413 19.158a.62.62 0 0 1-.411.158H3.58c-.512 0-.77-.58-.416-.923l2.369-2.29a.6.6 0 0 1 .41-.163H20.42c.517 0 .77.586.41.928z"/><path fill="url(#SVGRPwOObRg)" d="M18.413 10.473a.62.62 0 0 0-.411-.158H3.58c-.512 0-.77.58-.416.923l2.369 2.29c.111.103.257.16.41.163H20.42c.517 0 .77-.586.41-.928z"/><defs><linearGradient id="SVGzrxqqeia" x1="3.001" x2="21.459" y1="55.041" y2="54.871" gradientUnits="userSpaceOnUse"><stop stop-color="#599db0"/><stop offset="1" stop-color="#47f8c3"/></linearGradient><linearGradient id="SVGjVQeOkmE" x1="3.001" x2="21.341" y1="9.168" y2="9.027" gradientUnits="userSpaceOnUse"><stop stop-color="#c44fe2"/><stop offset="1" stop-color="#73b0d0"/></linearGradient><linearGradient id="SVGRPwOObRg" x1="4.036" x2="20.303" y1="12.003" y2="12.003" gradientUnits="userSpaceOnUse"><stop stop-color="#778cbf"/><stop offset="1" stop-color="#5dcdc9"/></linearGradient></defs></g></svg>
+          <span id="lobby-balance" class="balance-amount">0.00</span>
+          <span class="balance-label">SOL</span>
+          <button id="deposit-btn" class="deposit-btn">+ DEPOSIT</button>
+        </div>
+      </div>
+      <div class="lobby-top-actions">
+        <button id="how-it-works-btn-lobby" class="action-btn account-btn-style">HOW IT WORKS</button>
+        <button id="account-btn" class="action-btn account-btn-style">ACCOUNT</button>
+      </div>
+    </div>
+    
+    <div class="lobby-box">
+      <div class="lobby-grid">
+
+        <!-- ░░ LEFT PANEL — DEPLOYMENT ░░ -->
+        <section class="lobby-col lobby-col-left panel">
+          <div class="panel-tab">DEPLOYMENT</div>
+
+          <!-- Free Play Section -->
+          <div class="free-play-section">
+            <div class="free-play-header">
+              <span class="free-play-badge">FREE</span>
+              <span class="free-play-title">FREE PLAY</span>
+              <span class="free-play-subtitle">NO ENTRY FEE — PRACTICE MODE</span>
+            </div>
+            <div class="free-mode-select">
+              <div class="free-mode-option" data-mode="1v1">
+                <div class="free-mode-title">1 VS 1</div>
+                <div class="free-mode-players">2 PLAYERS</div>
+              </div>
+              <div class="free-mode-option" data-mode="2v2">
+                <div class="free-mode-title">2 VS 2</div>
+                <div class="free-mode-players">4 PLAYERS</div>
+              </div>
+            </div>
+            <button id="create-free-room-btn" class="action-btn create-free-room-btn" disabled>PLAY FREE</button>
+            <div id="free-fee-error" class="fee-error"></div>
+          </div>
+
+          <div class="section-divider">
+            <span class="divider-text">OR PLAY FOR SOL</span>
+          </div>
+
+          <!-- Paid Mode Selection -->
+          <div class="mode-select">
+            <div class="mode-option" data-mode="1v1">
+              <div class="mode-title">1 VS 1</div>
+              <div class="mode-desc">COMBAT DUEL</div>
+              <div class="mode-players">2 PLAYERS</div>
+            </div>
+            <div class="mode-option" data-mode="2v2">
+              <div class="mode-title">2 VS 2</div>
+              <div class="mode-desc">SQUAD ASSAULT</div>
+              <div class="mode-players">4 PLAYERS</div>
+            </div>
+          </div>
+
+          <!-- Entry Fee Selection (shown after mode select) -->
+          <div id="entry-fee-section" class="entry-fee-section" style="display:none;">
+            <div class="entry-fee-title">SELECT ENTRY FEE</div>
+            <div class="entry-fee-options">
+              <div class="fee-option" data-fee="0.01">
+                <div class="fee-amount">0.01</div>
+                <div class="fee-label">SOL</div>
+              </div>
+              <div class="fee-option" data-fee="0.05">
+                <div class="fee-amount">0.05</div>
+                <div class="fee-label">SOL</div>
+              </div>
+              <div class="fee-option" data-fee="0.1">
+                <div class="fee-amount">0.1</div>
+                <div class="fee-label">SOL</div>
+              </div>
+              <div class="fee-option" data-fee="0.5">
+                <div class="fee-amount">0.5</div>
+                <div class="fee-label">SOL</div>
+              </div>
+            </div>
+            <div id="fee-error" class="fee-error"></div>
+            <button id="create-room-btn" class="action-btn create-room-btn" disabled>CREATE ROOM</button>
+          </div>
+        </section>
+
+        <!-- ░░ CENTER PANEL — BATTLEFIELDS ░░ -->
+        <section class="lobby-col lobby-col-center panel">
+          <div class="panel-tab">WAR ROOMS</div>
+          <div class="lobby-actions">
+            <button id="refresh-rooms-btn" class="action-btn">SCAN BATTLES</button>
+          </div>
+          <div class="rooms-list" id="rooms-list">
+            <div class="rooms-header">
+              <span>ACTIVE BATTLEFIELDS</span>
+              <span class="rooms-count" id="rooms-count">0 ROOMS</span>
+            </div>
+            <div class="rooms-grid" id="rooms-grid">
+              <!-- Rooms will be inserted here -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ░░ RIGHT PANEL — INTEL / LEADERBOARD ░░ -->
+        <section class="lobby-col lobby-col-right panel">
+          <div class="panel-tab">INTEL</div>
+          <div class="leaderboard-section">
+            <div class="leaderboard-header">
+              <span>LEADERBOARD (24H)</span>
+              <span class="leaderboard-reward">🏆 1ST: 2 SOL</span>
+            </div>
+            <div class="leaderboard-grid" id="leaderboard-grid">
+              <!-- Leaderboard rows inserted here -->
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <a href="https://x.com/i/communities/2029979761783549986/" target="_blank" class="x-btn lobby-x-btn" title="Follow us on X">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    </a>
+  </div>
+
+  <!-- Account Popup -->
+  <div id="account-popup" class="account-popup" style="display:none;">
+    <div class="account-popup-content">
+      <div class="account-popup-title">ACCOUNT</div>
+      <div class="account-field">
+        <label>PUBLIC KEY</label>
+        <div class="account-key" id="account-public-key"></div>
+      </div>
+      <div class="account-field">
+        <label>PRIVATE KEY</label>
+        <div class="account-key account-private-key" id="account-private-key">Click to reveal</div>
+      </div>
+      <div class="account-stats">
+        <div class="stat-item"><span class="stat-label">WINS</span><span class="stat-value" id="account-wins">0</span></div>
+        <div class="stat-item"><span class="stat-label">LOSSES</span><span class="stat-value" id="account-losses">0</span></div>
+        <div class="stat-item"><span class="stat-label">KILLS</span><span class="stat-value" id="account-kills">0</span></div>
+        <div class="stat-item"><span class="stat-label">DEATHS</span><span class="stat-value" id="account-deaths">0</span></div>
+      </div>
+      <div class="stat-item stat-balance">
+        <span class="stat-label">BALANCE</span>
+        <span class="stat-value" id="account-balance">0.00 SOL</span>
+      </div>
+      <div class="account-popup-actions">
+        <button id="logout-btn" class="action-btn logout-btn">LOGOUT</button>
+        <button id="account-close-btn" class="action-btn">CLOSE</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Waiting Room Overlay -->
+  <div id="waiting-overlay" class="waiting-overlay" style="display:none;">
+    <div class="waiting-content">
+      <div class="waiting-title">WAITING FOR PLAYERS</div>
+      <div class="waiting-room-id">ROOM: <span id="waiting-room-id"></span></div>
+      <div class="waiting-mode" id="waiting-mode"></div>
+      <div class="waiting-players" id="waiting-players">1 / 2</div>
+      <div class="waiting-dots"><span>.</span><span>.</span><span>.</span></div>
+      <div class="waiting-fee" id="waiting-fee"></div>
+      <button id="waiting-leave-btn" class="action-btn waiting-leave-btn">LEAVE ROOM</button>
+    </div>
+  </div>
+
+    <div id="countdown-overlay" class="countdown-overlay">
+    <div class="countdown-content">
+      <div class="countdown-title">MATCH STARTING</div>
+      <div class="countdown-number" id="countdown-number">3</div>
+    </div>
+  </div>
+
+  <!-- Game -->
+  <div id="game-container">
+    <canvas id="gameCanvas"></canvas>
+  </div>
+
+  <!-- CRT Overlay -->
+  <div id="vignette"></div>
+
+  <!-- Scoreboard -->
+  <div id="scoreboard">
+    <span class="score-team score-usa">🇺🇸 USA <span class="score-num" id="score-usa">0</span></span>
+    <span class="score-divider">—</span>
+    <span class="score-team score-iran"><span class="score-num" id="score-iran">0</span> IRAN 🇮🇷</span>
+  </div>
+
+  <!-- HUD -->
+  <div id="hud">
+    <span class="team-badge" id="team-badge">USA</span>
+    <div class="hp-bar-bg"><div class="hp-bar-fill" id="hp-bar"></div></div>
+    <span class="hp-text" id="hp-text">100 HP</span>
+  </div>
+
+  <!-- Kill Feed -->
+  <div id="kill-feed"></div>
+
+  <!-- Respawn Overlay -->
+  <div id="respawn-overlay"><span>YOU DIED — RESPAWNING...</span></div>
+
+  <!-- Round Timer Overlay -->
+  <div id="round-timer-overlay" class="round-timer-overlay">
+    <div class="round-timer-content">
+      <div class="round-winner"></div>
+      <div class="round-scores"></div>
+      <div class="round-timer">NEXT ROUND IN: <span class="round-timer-number">2</span></div>
+    </div>
+  </div>
+
+  <!-- Room Info -->
+  <div id="room-info">ROOM: <span id="room-id-display"></span></div>
+
+  <!-- Prize Pool HUD (shown during game) -->
+  <div id="prize-pool-hud" style="display:none;">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" class="prize-icon"><g fill="none"><path fill="url(#SVGzrxqqeia2)" d="M18.413 7.902a.62.62 0 0 1-.411.163H3.58c-.512 0-.77-.585-.416-.928l2.369-2.284a.6.6 0 0 1 .41-.169H20.42c.517 0 .77.59.41.935z"/><path fill="url(#SVGjVQeOkmE2)" d="M18.413 19.158a.62.62 0 0 1-.411.158H3.58c-.512 0-.77-.58-.416-.923l2.369-2.29a.6.6 0 0 1 .41-.163H20.42c.517 0 .77.586.41.928z"/><path fill="url(#SVGRPwOObRg2)" d="M18.413 10.473a.62.62 0 0 0-.411-.158H3.58c-.512 0-.77.58-.416.923l2.369 2.29c.111.103.257.16.41.163H20.42c.517 0 .77-.586.41-.928z"/><defs><linearGradient id="SVGzrxqqeia2" x1="3.001" x2="21.459" y1="55.041" y2="54.871" gradientUnits="userSpaceOnUse"><stop stop-color="#599db0"/><stop offset="1" stop-color="#47f8c3"/></linearGradient><linearGradient id="SVGjVQeOkmE2" x1="3.001" x2="21.341" y1="9.168" y2="9.027" gradientUnits="userSpaceOnUse"><stop stop-color="#c44fe2"/><stop offset="1" stop-color="#73b0d0"/></linearGradient><linearGradient id="SVGRPwOObRg2" x1="4.036" x2="20.303" y1="12.003" y2="12.003" gradientUnits="userSpaceOnUse"><stop stop-color="#778cbf"/><stop offset="1" stop-color="#5dcdc9"/></linearGradient></defs></g></svg>
+    <span id="prize-pool-amount">0.00</span>
+    <span class="prize-label">SOL PRIZE POOL</span>
+  </div>
+
+  <!-- Deposit Modal -->
+  <div id="deposit-modal" class="account-popup" style="display:none;">
+    <div class="account-popup-content deposit-modal-content">
+      <div class="account-popup-title">DEPOSIT SOL</div>
+      <div class="deposit-info">Select the amount you want to deposit, then send the exact amount to the wallet address shown below.</div>
+
+      <!-- Step 1: Amount Selection -->
+      <div id="deposit-step-amounts" class="deposit-amounts">
+        <button class="deposit-amount-btn" data-amount="0.1">0.1 SOL</button>
+        <button class="deposit-amount-btn" data-amount="0.5">0.5 SOL</button>
+        <button class="deposit-amount-btn" data-amount="1">1 SOL</button>
+        <button class="deposit-amount-btn" data-amount="5">5 SOL</button>
+      </div>
+
+      <!-- Step 2: Wallet Address + Instructions (hidden until amount selected) -->
+      <div id="deposit-step-address" class="deposit-address-section" style="display:none;">
+        <div class="deposit-selected-amount">SEND EXACTLY <span id="deposit-exact-amount" class="deposit-highlight">0.00</span> SOL</div>
+        <div class="deposit-address-label">TO THIS WALLET ADDRESS:</div>
+        <div class="deposit-address-box">
+          <span id="deposit-wallet-address" class="deposit-wallet-text">Loading...</span>
+          <button id="copy-wallet-btn" class="copy-btn" title="Copy address">COPY</button>
+        </div>
+        <div class="deposit-instructions">
+          <div class="deposit-instruction-item">1. Copy the wallet address above</div>
+          <div class="deposit-instruction-item">2. Open your Solana wallet (Phantom, Solflare, etc.)</div>
+          <div class="deposit-instruction-item">3. Send exactly <span class="deposit-highlight deposit-exact-repeat">0.00</span> SOL to the address</div>
+          <div class="deposit-instruction-item">4. Click "I'VE SENT IT" after your transaction confirms</div>
+        </div>
+        <button id="deposit-verify-btn" class="action-btn verify-btn">I'VE SENT IT</button>
+        <div id="deposit-verify-status" class="deposit-status"></div>
+        <button id="deposit-back-btn" class="action-btn back-btn">← BACK</button>
+      </div>
+
+      <div id="deposit-status" class="deposit-status"></div>
+      <div class="account-popup-actions">
+        <button id="deposit-close-btn" class="action-btn">CLOSE</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Controls Info -->
+  <div id="controls-info">
+    <div class="controls-title">CONTROLS</div>
+    <div class="control-item">↑ W - Move Up</div>
+    <div class="control-item">↓ S - Move Down</div>
+    <div class="control-item">← A - Move Left</div>
+    <div class="control-item">→ D - Move Right</div>
+    <div class="control-item">SPACE/F - Shoot</div>
+  </div>
+
+  <!-- Chat Interface -->
+  <div id="chat-container">
+    <div id="chat-messages"></div>
+    <div class="chat-input-container">
+      <input type="text" id="chat-input" placeholder="Type message..." maxlength="200">
+      <button id="chat-send">SEND</button>
+    </div>
+  </div>
+
+  <!-- How It Works Popup -->
+  <div id="how-it-works-popup" class="account-popup" style="display:none;">
+    <div class="account-popup-content how-it-works-content">
+      <div class="account-popup-title">HOW IT WORKS</div>
+      <div class="hiw-sections">
+        <div class="hiw-section">
+          <div class="hiw-section-title">GETTING STARTED</div>
+          <div class="hiw-step">1. Sign up to create a new account. A unique keypair (public key + private key) is generated for you.</div>
+          <div class="hiw-step">2. Save your private key somewhere safe. It is the only way to log back into your account.</div>
+          <div class="hiw-step">3. Deposit SOL to your account balance using the DEPOSIT button in the lobby.</div>
+        </div>
+        <div class="hiw-section">
+          <div class="hiw-section-title">CREATING / JOINING A MATCH</div>
+          <div class="hiw-step">1. Select a game mode: 1v1 (2 players) or 2v2 (4 players).</div>
+          <div class="hiw-step">2. Choose FREE PLAY to practice with no entry fee, or pick a SOL entry fee (0.01 / 0.05 / 0.1 / 0.5 SOL) to play for real.</div>
+          <div class="hiw-step">3. Click CREATE FREE ROOM or CREATE ROOM, or join an existing room from the ACTIVE BATTLEFIELDS list.</div>
+          <div class="hiw-step">4. Once all player slots are filled, a 3-second countdown starts and the match begins.</div>
+        </div>
+        <div class="hiw-section">
+          <div class="hiw-section-title">GAMEPLAY</div>
+          <div class="hiw-step">W / Up Arrow -- Move up / Jump</div>
+          <div class="hiw-step">S / Down Arrow -- Crouch (in trenches)</div>
+          <div class="hiw-step">A / Left Arrow -- Move left</div>
+          <div class="hiw-step">D / Right Arrow -- Move right</div>
+          <div class="hiw-step">SPACE or F -- Shoot</div>
+          <div class="hiw-step">You are assigned to either the UNITED STATES or IRAN. Eliminate opponents to score kills for your team.</div>
+        </div>
+        <div class="hiw-section">
+          <div class="hiw-section-title">ROUNDS AND WINNING</div>
+          <div class="hiw-step">Matches are best-of-3 rounds. Each round has a kill target.</div>
+          <div class="hiw-step">The first team to reach the kill target wins the round.</div>
+          <div class="hiw-step">Win 2 out of 3 rounds to win the match.</div>
+        </div>
+        <div class="hiw-section">
+          <div class="hiw-section-title">PRIZE POOL AND PAYOUTS</div>
+          <div class="hiw-step">All entry fees are combined into a prize pool (minus a small platform fee).</div>
+          <div class="hiw-step">The winning team splits the prize pool evenly among its members.</div>
+          <div class="hiw-step">Winnings are credited to your in-game balance automatically.</div>
+        </div>
+        <div class="hiw-section">
+          <div class="hiw-section-title">LEADERBOARD</div>
+          <div class="hiw-step">The leaderboard tracks wins, losses, kills, and deaths over the last 24 hours.</div>
+          <div class="hiw-step">The top-ranked player earns a 2 SOL reward.</div>
+        </div>
+      </div>
+      <div class="account-popup-actions">
+        <button id="how-it-works-close-btn" class="action-btn">CLOSE</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <!-- Socket.IO loaded from game server (Railway). Update this URL after deploying to Railway. -->
+  <script>
+    // Use same-origin when running locally; point to deployed server in production.
+    window.GAME_SERVER_URL = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+      ? ''
+      : 'https://wargames-ori4.onrender.com';
+  </script>
+  <script>
+    // Dynamically load socket.io client from game server
+    (function() {
+      var src = window.GAME_SERVER_URL
+        ? window.GAME_SERVER_URL + '/socket.io/socket.io.js'
+        : '/socket.io/socket.io.js';
+      var s = document.createElement('script');
+      s.src = src;
+      s.onload = function() {
+        // Load game.js after socket.io is ready
+        var g = document.createElement('script');
+        g.src = 'game.js';
+        document.body.appendChild(g);
+      };
+      s.onerror = function() {
+        console.error('Failed to load socket.io from ' + src);
+        document.body.innerHTML = '<div style="color:white;text-align:center;padding:40px;font-family:monospace;">' +
+          '<h2>CONNECTION ERROR</h2><p>Cannot reach game server at: ' + (window.GAME_SERVER_URL || 'this origin') + '</p>' +
+          '<p>Make sure the game server is running.</p></div>';
+      };
+      document.body.appendChild(s);
+    })();
+  </script>
+</body>
+</html>
