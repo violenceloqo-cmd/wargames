@@ -961,7 +961,7 @@ body.in-game #chat-container {
   position: absolute;
   inset: 0;
   background:
-    /* War sky glow — USA vs Iran split */
+    /* War sky glow — split */
     radial-gradient(ellipse 60% 40% at 25% 0%, rgba(30,64,175,0.2) 0%, transparent 70%),
     radial-gradient(ellipse 60% 40% at 75% 0%, rgba(22,163,74,0.14) 0%, transparent 70%),
     radial-gradient(ellipse 80% 30% at 50% 8%, rgba(220,38,38,0.1) 0%, transparent 55%),

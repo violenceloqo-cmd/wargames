@@ -496,25 +496,6 @@ app.post('/api/admin/clear-chat', async (req, res) => {
   }
 });
 
-// Serve favicon from root
-app.get('/favicon.png', (req, res) => {
-  res.sendFile(path.join(__dirname, 'favicon.png'));
-});
-
-// Serve favicon sizes
-app.get('/favicon-32.png', (req, res) => {
-  res.sendFile(path.join(__dirname, 'favicon-32.png'));
-});
-app.get('/favicon-64.png', (req, res) => {
-  res.sendFile(path.join(__dirname, 'favicon-64.png'));
-});
-app.get('/favicon-128.png', (req, res) => {
-  res.sendFile(path.join(__dirname, 'favicon-128.png'));
-});
-app.get('/favicon-192.png', (req, res) => {
-  res.sendFile(path.join(__dirname, 'favicon-192.png'));
-});
-
 // ─── Game Constants ───
 const TICK_RATE = 60;
 const MAP_WIDTH = 1600;
@@ -1327,5 +1308,5 @@ setInterval(() => {
 // ─── Start Server ───
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`USA vs Iran Soldier Games — Server running on port ${PORT}`);
+  console.log(`Soldier Games — Server running on port ${PORT}`);
 });
