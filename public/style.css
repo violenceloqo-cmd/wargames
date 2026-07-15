@@ -1,14 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 /* ═══════════════════════════════════════════════════
-   USA vs IRAN WAR GAMES THEME
-   Palette: Gunmetal (#1a1d21, #2a2d32, #3a3d42)
-            USA Navy (#1e40af, #3b82f6, #60a5fa)
-            Iran Green (#16a34a, #22c55e, #2ecc71)
-            Alert Red (#c0392b, #dc2626)
+   SOLDIER GAMES — SOLANA SUNSET THEME
+   Palette: Solana Purple (#9945ff, #b06bff)
+            Solana Teal (#14f195)
+            Sunset Magenta / Pink (#ff5fa2)
+            Deep Purple Dusk (#1a0b33, #2d1146)
+   Base UI colors are overridden in the reskin block at EOF.
    Typography: 'Inter' for all text
-   Borders: 1px solid, rounded corners
-   Screw icons: ⊕ placed via ::before/::after on containers
    ═══════════════════════════════════════════════════ */
 
 * {
@@ -2319,31 +2318,32 @@ body.in-game #chat-container {
 }
 
 /* ════════════════════════════════════════════════════════════
-   ███  WAR GAMES — REDESIGN OVERRIDES  ███
+   ███  SOLDIER GAMES — REDESIGN OVERRIDES  ███
    Animated 3D battlefield background, soldier silhouettes,
-   repositioned multi-panel lobby, tactical war palette.
+   repositioned multi-panel lobby, Solana sunset palette.
    ════════════════════════════════════════════════════════════ */
 
 :root {
-  --usa: #3b82f6;
-  --usa-deep: #1e40af;
-  --usa-glow: rgba(59, 130, 246, 0.55);
-  --iran: #22c55e;
-  --iran-deep: #15803d;
-  --iran-glow: rgba(34, 197, 94, 0.5);
-  --danger: #e0392b;
-  --amber: #f5a623;
-  --steel: #aab4c0;
-  --gun-0: #0a0c10;
-  --gun-1: #11151b;
-  --gun-2: #1a2027;
-  --gun-3: #2a323c;
-  --sand: #b8a37a;
+  /* Solana sunset palette — purple + teal glow over a magenta/pink dusk */
+  --usa: #9945ff;
+  --usa-deep: #7a2ff0;
+  --usa-glow: rgba(153, 69, 255, 0.55);
+  --iran: #14f195;
+  --iran-deep: #0fb87a;
+  --iran-glow: rgba(20, 241, 149, 0.5);
+  --danger: #ff4d6d;
+  --amber: #ff5fa2;
+  --steel: #c9b8e8;
+  --gun-0: #0a0714;
+  --gun-1: #150e26;
+  --gun-2: #241638;
+  --gun-3: #34214f;
+  --sand: #c79be8;
 }
 
 /* ─── Base ─── */
 body {
-  background: #07090c;
+  background: #0a0714;
 }
 
 /* Let the global war scene show through the screens */
@@ -2368,17 +2368,20 @@ body {
   perspective: 1100px;
   perspective-origin: 50% 65%;
   background:
-    radial-gradient(ellipse 70% 55% at 50% 120%, rgba(224,57,43,0.10) 0%, transparent 60%),
-    linear-gradient(180deg, #05070a 0%, #0a0e14 45%, #0c0f13 70%, #08090c 100%);
+    /* glowing sunset sitting on the horizon */
+    radial-gradient(ellipse 60% 34% at 78% 74%, rgba(255,150,90,0.30) 0%, rgba(255,95,162,0.14) 40%, transparent 70%),
+    radial-gradient(ellipse 90% 60% at 50% 100%, rgba(255,95,162,0.16) 0%, transparent 62%),
+    /* deep purple dusk sky */
+    linear-gradient(180deg, #1a0b33 0%, #2d1146 34%, #56194f 62%, #8a2a5a 82%, #c24a5e 100%);
 }
 
 .ws-sky {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 55% 45% at 22% 8%, rgba(30,64,175,0.22) 0%, transparent 60%),
-    radial-gradient(ellipse 55% 45% at 78% 8%, rgba(21,128,61,0.18) 0%, transparent 60%),
-    radial-gradient(circle at 50% 0%, rgba(245,166,35,0.10) 0%, transparent 45%);
+    radial-gradient(ellipse 55% 45% at 22% 8%, rgba(153,69,255,0.28) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 45% at 78% 12%, rgba(20,241,149,0.14) 0%, transparent 60%),
+    radial-gradient(circle at 78% 72%, rgba(255,170,110,0.35) 0%, transparent 40%);
   animation: skyPulse 9s ease-in-out infinite alternate;
 }
 @keyframes skyPulse {
@@ -2560,8 +2563,8 @@ body {
   left: 0; right: 0; bottom: 0;
   height: 22%;
   background:
-    linear-gradient(0deg, #05070a 0%, rgba(20,18,14,0.9) 40%, transparent 100%),
-    repeating-linear-gradient(90deg, transparent 0 70px, rgba(120,100,70,0.05) 70px 73px);
+    linear-gradient(0deg, #0a0714 0%, rgba(26,11,45,0.92) 40%, transparent 100%),
+    repeating-linear-gradient(90deg, transparent 0 70px, rgba(153,69,255,0.06) 70px 73px);
 }
 
 .ws-vignette {
@@ -2725,3 +2728,135 @@ body {
   .soldier.s-depth-far, .soldier.s-depth-mid { display: none; }
   .soldier.s-depth-near { opacity: 0.35; }
 }
+
+/* ════════════════════════════════════════════════════════════
+   ███  SOLDIER GAMES — SOLANA SUNSET RESKIN  ███
+   Purple (#9945ff) + teal (#14f195) glow over a magenta dusk,
+   inspired by the Solana soldier key art.
+   ════════════════════════════════════════════════════════════ */
+
+/* Hero soldier artwork on the auth screen */
+.auth-hero-img {
+  width: 168px;
+  height: 168px;
+  object-fit: cover;
+  border-radius: 20px;
+  margin-bottom: 22px;
+  border: 1px solid rgba(153, 69, 255, 0.5);
+  box-shadow:
+    0 0 0 1px rgba(20, 241, 149, 0.15),
+    0 12px 40px rgba(153, 69, 255, 0.4),
+    0 0 60px rgba(255, 95, 162, 0.25);
+  animation: heroFloat 6s ease-in-out infinite;
+}
+@keyframes heroFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Brand title / subtitle */
+.lobby-title {
+  background: linear-gradient(90deg, #9945ff 0%, #b06bff 28%, #ff5fa2 50%, #35f0a5 74%, #14f195 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.lobby-subtitle,
+#auth-screen .lobby-subtitle {
+  color: #14f195;
+  text-shadow: 0 0 18px rgba(20, 241, 149, 0.4);
+}
+
+/* Buttons */
+.action-btn { color: #b06bff; border-color: var(--usa-deep); }
+.action-btn:hover { background: var(--usa); border-color: var(--usa); color: #0a0714; }
+.auth-btn { background: var(--usa); border-color: var(--usa); color: #0a0714; }
+.auth-btn:hover { background: #b06bff; border-color: #b06bff; color: #0a0714; }
+.login-variant { background: var(--gun-1); color: #b06bff; border-color: var(--usa-deep); }
+.login-variant:hover { background: var(--usa); color: #0a0714; border-color: var(--usa); }
+.account-btn-style { background: transparent; color: var(--steel); border-color: var(--gun-2); }
+.account-btn-style:hover { background: var(--gun-1); border-color: var(--usa); color: #b06bff; }
+#chat-send { background: var(--usa); color: #0a0714; border-color: var(--usa); }
+#chat-send:hover { background: #b06bff; }
+
+/* Inputs / focus states */
+.auth-input:focus,
+#chat-input:focus,
+.account-key:hover { border-color: var(--usa); }
+
+/* Team identity → Solana purple (USA) vs teal (IRAN) */
+.team-label-usa,
+.score-usa {
+  color: #b06bff;
+  -webkit-text-fill-color: #b06bff;
+}
+.team-label-iran,
+.score-iran { color: #14f195; }
+.vs-divider,
+.countdown-number,
+.round-timer-number,
+#respawn-overlay span { color: #ff5fa2; }
+.badge-usa { background: rgba(153,69,255,0.14); border-color: var(--usa); color: #b06bff; }
+.badge-iran { background: rgba(20,241,149,0.12); border-color: #14f195; color: #14f195; }
+.hp-bar-fill { background: #14f195; }
+
+/* Text accents that were USA-blue */
+.mode-title,
+.rooms-count,
+.room-id,
+.countdown-title,
+.controls-title,
+.chat-message .player-name,
+.waiting-title,
+.waiting-room-id span,
+.account-popup-title,
+.account-key,
+.stat-value,
+.leaderboard-rank,
+.leaderboard-reward,
+.balance-amount,
+.fee-amount,
+.room-fee,
+.match-prize-info,
+.deposit-highlight,
+.deposit-amount-btn,
+.hiw-section-title,
+.entry-fee-title ~ .fee-amount {
+  color: #b06bff;
+}
+
+/* Teal (Iran-green) accents kept on the teal side of the palette */
+.free-play-title,
+.free-mode-title,
+.lb-wins,
+.match-payout,
+.deposit-status { color: #14f195; }
+.free-play-badge { background: #14f195; border-color: #14f195; color: #0a0714; }
+.create-free-room-btn { background: #14f195; border-color: #14f195; color: #0a0714; }
+.create-free-room-btn:hover:not(:disabled) { background: #0fb87a; }
+.free-mode-option:hover,
+.free-mode-option.selected { border-color: #14f195; }
+
+/* Borders / hairlines that were blue */
+.room-item::after { color: #b06bff; border-color: var(--gun-2); }
+.room-item:hover { border-left-color: var(--usa); }
+.hiw-section { border-left-color: var(--usa-deep); }
+.contract-address-container:hover { border-color: var(--usa); }
+.copy-contract-btn:hover { border-color: var(--usa); color: #b06bff; }
+.copy-contract-btn.copied { background: var(--usa); border-color: #b06bff; }
+.leaderboard-row:first-child { border-color: var(--usa-deep); background: rgba(153,69,255,0.06); }
+.waiting-dots span { color: var(--usa); }
+
+/* Panels + scoreboard tops keep the tri-color but on-palette */
+.lobby-box { border-top-color: var(--usa-deep); }
+.auth-box,
+.account-popup-content,
+.waiting-content { border-top-color: var(--usa-deep); }
+#scoreboard {
+  border-top-color: var(--usa-deep);
+  box-shadow: 0 0 20px rgba(153, 69, 255, 0.2);
+}
+
+/* Scrollbar thumbs on hover */
+.lobby-box::-webkit-scrollbar-thumb:hover,
+.rooms-grid::-webkit-scrollbar-thumb:hover { background: var(--usa); }

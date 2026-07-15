@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Panel — USA vs Iran War Games</title>
+  <title>Admin Panel — USA vs Iran Soldier Games</title>
   <link rel="icon" type="image/png" href="/favicon-32.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
   <link rel="icon" type="image/png" sizes="64x64" href="/favicon-64.png">
@@ -12,7 +12,7 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Share Tech Mono', 'Courier New', monospace;
-      background: #0d0f12;
+      background: linear-gradient(180deg, #150e26 0%, #0a0714 60%, #0a0714 100%);
       color: #c8ccd0;
       min-height: 100vh;
       display: flex;
@@ -28,7 +28,7 @@
 
     h1 {
       text-align: center;
-      color: #60a5fa;
+      color: #b06bff;
       font-size: 1.6rem;
       margin-bottom: 6px;
       letter-spacing: 6px;
@@ -45,9 +45,9 @@
     }
 
     .card {
-      background: #13161a;
-      border: 1px solid #2a2d32;
-      border-top: 1px solid #1e40af;
+      background: #150e26;
+      border: 1px solid #241638;
+      border-top: 1px solid #9945FF;
       border-radius: 0;
       padding: 24px;
       margin-bottom: 16px;
@@ -74,7 +74,7 @@
 
     .card h2 {
       font-size: 1rem;
-      color: #60a5fa;
+      color: #b06bff;
       margin-bottom: 14px;
       padding-bottom: 8px;
       border-bottom: 1px solid #2a2d32;
@@ -109,15 +109,15 @@
       margin-bottom: 12px;
     }
     input:focus {
-      border-color: #1e40af;
+      border-color: #9945FF;
     }
 
     button {
       width: 100%;
       padding: 10px;
-      background: #1e40af;
-      color: #0d0f12;
-      border: 1px solid #1e40af;
+      background: #9945FF;
+      color: #0a0714;
+      border: 1px solid #9945FF;
       border-radius: 0;
       font-size: 0.9rem;
       font-weight: 700;
@@ -127,7 +127,7 @@
       cursor: pointer;
       transition: background 0.15s;
     }
-    button:hover { background: #60a5fa; }
+    button:hover { background: #b06bff; }
     button:active { transform: none; }
     button:disabled {
       background: #2a2d32;
@@ -146,9 +146,9 @@
     }
     .msg.success {
       display: block;
-      background: rgba(46,204,113,0.08);
-      border: 1px solid #2ecc71;
-      color: #2ecc71;
+      background: rgba(20,241,149,0.08);
+      border: 1px solid #14f195;
+      color: #14f195;
     }
     .msg.error {
       display: block;
@@ -168,8 +168,8 @@
       transition: border-color 0.15s;
     }
     .user-result:hover {
-      border-color: #1e40af;
-      border-left-color: #1e40af;
+      border-color: #9945FF;
+      border-left-color: #9945FF;
     }
     .user-result .pk {
       font-family: 'Share Tech Mono', monospace;
@@ -249,8 +249,8 @@
 </head>
 <body>
   <div class="container">
-    <h1>⚙ WAR GAMES ADMIN</h1>
-    <p class="subtitle">USA vs Iran War Games — Balance Management</p>
+    <h1>⚙ SOLDIER GAMES ADMIN</h1>
+    <p class="subtitle">USA vs Iran Soldier Games — Balance Management</p>
 
     <!-- Login Screen -->
     <div id="loginScreen" class="card">

@@ -1327,5 +1327,5 @@ setInterval(() => {
 // ─── Start Server ───
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log(`USA vs Iran War Games — Server running on port ${PORT}`);
+  console.log(`USA vs Iran Soldier Games — Server running on port ${PORT}`);
 });

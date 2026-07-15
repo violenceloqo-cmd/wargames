@@ -1,4 +1,4 @@
-// ─── UNITED STATES vs IRAN: War Games — Client ───
+// ─── UNITED STATES vs IRAN: Soldier Games — Client ───
 (function () {
   'use strict';
 
