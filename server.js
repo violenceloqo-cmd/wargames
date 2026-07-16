@@ -10,11 +10,136 @@ const { createClient } = require('@supabase/supabase-js');
 // ─── Supabase Client ───
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-if (!supabaseUrl || !supabaseServiceKey) {
-  console.error('Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY in .env');
-  process.exit(1);
+
+// ─── In-memory database fallback ───
+// Used automatically when Supabase is not configured or unreachable (e.g.
+// local dev without a live project), so the app stays fully usable.
+// NOTE: data is NOT persisted across server restarts.
+function createInMemorySupabase() {
+  const tables = { accounts: [], game_transactions: [], chat_messages: [] };
+  let idCounter = 1;
+
+  class Query {
+    constructor(table) {
+      this.table = table;
+      this.op = 'select';
+      this.cols = '*';
+      this.filters = [];
+      this.orders = [];
+      this._limit = null;
+      this._single = false;
+      this._insertRows = null;
+      this._updateVals = null;
+    }
+    select(cols) { if (this.op === 'select') this.cols = cols || '*'; return this; }
+    insert(rows) { this.op = 'insert'; this._insertRows = Array.isArray(rows) ? rows : [rows]; return this; }
+    update(vals) { this.op = 'update'; this._updateVals = vals; return this; }
+    delete() { this.op = 'delete'; return this; }
+    eq(col, val) { this.filters.push(r => r[col] === val); return this; }
+    neq(col, val) { this.filters.push(r => r[col] !== val); return this; }
+    gte(col, val) { this.filters.push(r => r[col] >= val); return this; }
+    ilike(col, pattern) {
+      const rx = new RegExp('^' + pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/%/g, '.*') + '$', 'i');
+      this.filters.push(r => rx.test(String(r[col] == null ? '' : r[col])));
+      return this;
+    }
+    or(clause) {
+      const preds = clause.split(',').map(part => {
+        const [col, opv, raw] = part.split('.');
+        const num = Number(raw);
+        return r => {
+          const v = r[col];
+          switch (opv) {
+            case 'gt': return v > num;
+            case 'lt': return v < num;
+            case 'gte': return v >= num;
+            case 'lte': return v <= num;
+            case 'eq': return v == num;
+            default: return false;
+          }
+        };
+      });
+      this.filters.push(r => preds.some(fn => fn(r)));
+      return this;
+    }
+    order(col, opts) { this.orders.push({ col, asc: !opts || opts.ascending !== false }); return this; }
+    limit(n) { this._limit = n; return this; }
+    single() { this._single = true; return this._exec(); }
+    then(resolve, reject) { return this._exec().then(resolve, reject); }
+    _matched() {
+      let rows = tables[this.table] || [];
+      for (const f of this.filters) rows = rows.filter(f);
+      return rows;
+    }
+    async _exec() {
+      try {
+        const t = tables[this.table] || (tables[this.table] = []);
+        if (this.op === 'insert') {
+          const inserted = this._insertRows.map(r => {
+            const row = { id: idCounter++, created_at: new Date().toISOString(), ...r };
+            t.push(row);
+            return row;
+          });
+          return { data: this._single ? inserted[0] : inserted, error: null };
+        }
+        if (this.op === 'update') {
+          const rows = this._matched();
+          rows.forEach(r => Object.assign(r, this._updateVals));
+          return { data: this._single ? (rows[0] || null) : rows, error: null };
+        }
+        if (this.op === 'delete') {
+          const del = new Set(this._matched());
+          tables[this.table] = t.filter(r => !del.has(r));
+          return { data: null, error: null };
+        }
+        let rows = this._matched().slice();
+        for (const o of [...this.orders].reverse()) {
+          rows.sort((a, b) => (a[o.col] < b[o.col] ? -1 : a[o.col] > b[o.col] ? 1 : 0) * (o.asc ? 1 : -1));
+        }
+        if (this._limit != null) rows = rows.slice(0, this._limit);
+        if (this._single) {
+          if (!rows.length) return { data: null, error: { message: 'No rows found', code: 'PGRST116' } };
+          return { data: rows[0], error: null };
+        }
+        return { data: rows, error: null };
+      } catch (e) {
+        return { data: null, error: { message: e.message } };
+      }
+    }
+  }
+  return { from: table => new Query(table), __inMemory: true };
 }
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+let usingInMemoryDb = false;
+const hasSupabaseConfig = !!(supabaseUrl && supabaseServiceKey) &&
+  !/your-project-id|your-anon-key-here|your-service-role-key-here/.test(String(supabaseUrl) + String(supabaseServiceKey));
+
+let supabase;
+if (hasSupabaseConfig) {
+  supabase = createClient(supabaseUrl, supabaseServiceKey);
+} else {
+  console.warn('⚠  Supabase not configured in .env — using in-memory database (data will NOT persist).');
+  supabase = createInMemorySupabase();
+  usingInMemoryDb = true;
+}
+
+// Probe the configured Supabase host at startup; if it's unreachable
+// (dead project, no network, DNS failure), transparently fall back to the
+// in-memory database so signup/login/etc. keep working.
+async function ensureDatabaseReachable() {
+  if (usingInMemoryDb) return;
+  try {
+    const { error } = await supabase.from('accounts').select('public_key').limit(1);
+    const blob = error ? JSON.stringify(error) : '';
+    if (/fetch failed|ENOTFOUND|ECONNREFUSED|EAI_AGAIN|getaddrinfo|network/i.test(blob)) {
+      throw new Error('host unreachable');
+    }
+  } catch (e) {
+    console.warn('⚠  Supabase unreachable — falling back to in-memory database (data will NOT persist).');
+    supabase = createInMemorySupabase();
+    usingInMemoryDb = true;
+  }
+}
 
 const app = express();
 const server = http.createServer(app);
@@ -1307,6 +1432,11 @@ setInterval(() => {
 
 // ─── Start Server ───
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-  console.log(`Soldier Games — Server running on port ${PORT}`);
+ensureDatabaseReachable().finally(() => {
+  server.listen(PORT, () => {
+    console.log(`Soldier Games — Server running on port ${PORT}`);
+    console.log(usingInMemoryDb
+      ? '   Database: IN-MEMORY (temporary, not persisted)'
+      : '   Database: Supabase');
+  });
 });
